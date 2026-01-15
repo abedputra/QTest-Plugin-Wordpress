@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 <div class="wrap">
     <h1 class="wp-heading-inline">QTest - All Tests</h1>
-    <a href="<?php echo admin_url('admin.php?page=qtest-new'); ?>" class="page-title-action">Add New</a>
+    <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-new')); ?>" class="page-title-action">Add New</a>
     
     <hr class="wp-header-end">
     
@@ -30,7 +30,7 @@ if (!defined('ABSPATH')) {
         <tbody>
             <?php if (empty($tests)): ?>
                 <tr>
-                    <td colspan="6">No tests found. <a href="<?php echo admin_url('admin.php?page=qtest-new'); ?>">Create your first test</a></td>
+                    <td colspan="6">No tests found. <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-new')); ?>">Create your first test</a></td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($tests as $test): ?>
@@ -44,14 +44,14 @@ if (!defined('ABSPATH')) {
                         <td><?php echo esc_html($test->description); ?></td>
                         <td><?php echo esc_html($test->created_at); ?></td>
                         <td>
-                            <a href="<?php echo admin_url('admin.php?page=qtest-new&test_id=' . $test->id); ?>" 
+                            <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-new&test_id=' . $test->id)); ?>" 
                                class="button button-small" 
                                title="Edit Test">
                                 <span class="dashicons dashicons-edit"></span>
                             </a>
                             <button type="button" 
                                     class="button button-small qtest-delete-test" 
-                                    data-test-id="<?php echo $test->id; ?>"
+                                    data-test-id="<?php echo esc_attr($test->id); ?>"
                                     title="Delete Test"
                                     style="color: #a00; margin-left: 5px;">
                                 <span class="dashicons dashicons-trash"></span>

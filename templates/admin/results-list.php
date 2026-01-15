@@ -7,28 +7,28 @@ if (!defined('ABSPATH')) {
 $selected_test_id = isset($_GET['test_id']) ? intval($_GET['test_id']) : null;
 ?>
 <div class="wrap">
-    <input type="hidden" id="qtest_nonce" value="<?php echo wp_create_nonce('qtest_nonce'); ?>">
+    <input type="hidden" id="qtest_nonce" value="<?php echo esc_attr(wp_create_nonce('qtest_nonce')); ?>">
     <h1 class="wp-heading-inline">QTest - Test Results</h1>
     
     <hr class="wp-header-end">
     
     <div class="qtest-results-filter" style="margin: 20px 0;">
-        <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+        <form method="get" action="<?php echo esc_url(admin_url('admin.php')); ?>">
             <input type="hidden" name="page" value="qtest-results">
             <label for="filter_test_id">
                 <strong>Filter by Test:</strong>
                 <select name="test_id" id="filter_test_id" style="margin-left: 10px;">
                     <option value="">All Tests</option>
                     <?php foreach ($tests as $test): ?>
-                        <option value="<?php echo $test->id; ?>" <?php selected($selected_test_id, $test->id); ?>>
-                            <?php echo esc_html($test->title); ?> (ID: <?php echo $test->id; ?>)
+                        <option value="<?php echo esc_attr($test->id); ?>" <?php selected($selected_test_id, $test->id); ?>>
+                            <?php echo esc_html($test->title); ?> (ID: <?php echo esc_html($test->id); ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
             </label>
             <input type="submit" class="button" value="Filter" style="margin-left: 10px;">
             <?php if ($selected_test_id): ?>
-                <a href="<?php echo admin_url('admin.php?page=qtest-results'); ?>" class="button">Clear Filter</a>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-results')); ?>" class="button">Clear Filter</a>
             <?php endif; ?>
         </form>
     </div>
@@ -63,7 +63,7 @@ $selected_test_id = isset($_GET['test_id']) ? intval($_GET['test_id']) : null;
                         <td><?php echo esc_html($result->email); ?></td>
                         <td>
                             <?php if ($test): ?>
-                                <a href="<?php echo admin_url('admin.php?page=qtest-new&test_id=' . $test->id); ?>">
+                                <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-new&test_id=' . $test->id)); ?>">
                                     <?php echo esc_html($test->title); ?>
                                 </a>
                             <?php else: ?>
@@ -88,14 +88,14 @@ $selected_test_id = isset($_GET['test_id']) ? intval($_GET['test_id']) : null;
                         <td>
                             <button type="button" 
                                     class="button button-small qtest-send-email" 
-                                    data-result-id="<?php echo $result->id; ?>"
+                                    data-result-id="<?php echo esc_attr($result->id); ?>"
                                     data-email="<?php echo esc_attr($result->email); ?>"
                                     title="Send Email">
                                 <span class="dashicons dashicons-email-alt"></span>
                             </button>
                             <button type="button" 
                                     class="button button-small qtest-delete-result" 
-                                    data-result-id="<?php echo $result->id; ?>"
+                                    data-result-id="<?php echo esc_attr($result->id); ?>"
                                     title="Delete Result"
                                     style="color: #a00; margin-left: 5px;">
                                 <span class="dashicons dashicons-trash"></span>

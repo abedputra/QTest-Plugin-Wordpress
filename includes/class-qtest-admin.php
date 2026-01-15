@@ -212,7 +212,7 @@ class QTest_Admin
             <select id="qtest-select-test" class="widefat">
                 <option value="">-- Select Test --</option>
                 <?php foreach ($tests as $test): ?>
-                    <option value="<?php echo esc_attr($test->id); ?>"><?php echo esc_html($test->title); ?> (ID: <?php echo $test->id; ?>)</option>
+                    <option value="<?php echo esc_attr($test->id); ?>"><?php echo esc_html($test->title); ?> (ID: <?php echo esc_html($test->id); ?>)</option>
                 <?php endforeach; ?>
             </select>
             <p class="description">This will insert a shortcode into your post.</p>

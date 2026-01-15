@@ -19,20 +19,21 @@ class QTest_Database {
         $column_exists = false;
         
         // Method 1: Check using INFORMATION_SCHEMA
-        $check_query = $wpdb->prepare(
+        $result = $wpdb->get_var($wpdb->prepare(
             "SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.COLUMNS 
             WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND COLUMN_NAME = %s",
             DB_NAME,
             $table,
             $column
-        );
-        $result = $wpdb->get_var($check_query);
+        ));
         
         if ($result > 0) {
             $column_exists = true;
         } else {
             // Method 2: Try to describe table (fallback)
-            $columns = $wpdb->get_results("DESCRIBE $table");
+            // Note: DESCRIBE is a DDL statement and cannot use prepare, but table name is safe (from $wpdb->prefix)
+            $table_escaped = esc_sql($table);
+            $columns = $wpdb->get_results("DESCRIBE `{$table_escaped}`");
             foreach ($columns as $col) {
                 if ($col->Field === $column) {
                     $column_exists = true;
@@ -43,8 +44,13 @@ class QTest_Database {
         
         // Add column if it doesn't exist
         if (!$column_exists) {
-            $after_clause = $after ? " AFTER $after" : '';
-            $query = "ALTER TABLE $table ADD COLUMN $column $definition$after_clause";
+            // Note: ALTER TABLE is a DDL statement and cannot use prepare
+            // But we escape table/column names for safety
+            $table_escaped = esc_sql($table);
+            $column_escaped = esc_sql($column);
+            $definition_escaped = esc_sql($definition);
+            $after_clause = $after ? ' AFTER ' . esc_sql($after) : '';
+            $query = "ALTER TABLE `{$table_escaped}` ADD COLUMN `{$column_escaped}` {$definition_escaped}{$after_clause}";
             $wpdb->query($query);
         }
     }

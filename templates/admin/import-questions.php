@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
     <div class="qtest-import-section" style="background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 20px; margin-bottom: 20px;">
         <h2>Import Questions</h2>
         <form id="qtest-import-form" enctype="multipart/form-data">
-            <input type="hidden" id="qtest_nonce" value="<?php echo wp_create_nonce('qtest_nonce'); ?>">
+            <input type="hidden" id="qtest_nonce" value="<?php echo esc_attr(wp_create_nonce('qtest_nonce')); ?>">
             
             <table class="form-table">
                 <tr>
@@ -30,7 +30,7 @@ if (!defined('ABSPATH')) {
                         <select id="import_test_id" name="test_id" class="regular-text" required>
                             <option value="">-- Select Test --</option>
                             <?php foreach ($tests as $test): ?>
-                                <option value="<?php echo $test->id; ?>"><?php echo esc_html($test->title); ?> (ID: <?php echo $test->id; ?>)</option>
+                                <option value="<?php echo esc_attr($test->id); ?>"><?php echo esc_html($test->title); ?> (ID: <?php echo esc_html($test->id); ?>)</option>
                             <?php endforeach; ?>
                         </select>
                         <p class="description">Select the test where you want to import questions.</p>
@@ -47,7 +47,7 @@ if (!defined('ABSPATH')) {
             
             <p class="submit">
                 <button type="submit" class="button button-primary">Import Questions</button>
-                <a href="<?php echo QTEST_PLUGIN_URL . 'templates/admin/sample-questions.csv'; ?>" class="button" download>Download CSV Template</a>
+                <a href="<?php echo esc_url(QTEST_PLUGIN_URL . 'templates/admin/sample-questions.csv'); ?>" class="button" download>Download CSV Template</a>
             </p>
         </form>
     </div>

@@ -2,12 +2,15 @@
 
 /**
  * Plugin Name: QTest
- * Plugin URI: https://abedputra.my.id
+ * Plugin URI: https://github.com/abedputra/QTest-Plugin-Wordpress
  * Description: A comprehensive quiz/test plugin with image upload support, progress tracking, and email results.
  * Version: 1.0.0
+ * Requires at least: 5.0
+ * Requires PHP: 7.0
  * Author: Abed Putra
  * Author URI: https://abedputra.my.id
  * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: qtest
  */
 
@@ -58,9 +61,6 @@ class QTest
         // Initialize AJAX handlers (once for both admin and frontend)
         add_action('init', array($this, 'init_ajax'));
 
-        // Initialize components
-        add_action('plugins_loaded', array($this, 'load_textdomain'));
-
         // Upgrade database on plugins_loaded (runs every time, but checks if columns exist)
         add_action('plugins_loaded', array($this, 'upgrade_database_check'), 1);
 
@@ -85,11 +85,6 @@ class QTest
         QTest_Database::create_tables();
         QTest_Database::upgrade_database();
         flush_rewrite_rules();
-    }
-
-    public function load_textdomain()
-    {
-        load_plugin_textdomain('qtest', false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
 
     public function upgrade_database_check()

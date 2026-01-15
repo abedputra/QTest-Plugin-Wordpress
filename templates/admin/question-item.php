@@ -7,17 +7,17 @@ $question_id = isset($question->id) ? $question->id : 0;
 $current_type = isset($question->question_type) && !empty($question->question_type) ? $question->question_type : 'multiple_choice';
 ?>
 
-<div class="qtest-question-item" data-question-id="<?php echo $question_id; ?>" data-index="<?php echo is_numeric($index) ? $index : 0; ?>" style="background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 20px; margin-bottom: 20px;">
+<div class="qtest-question-item" data-question-id="<?php echo esc_attr($question_id); ?>" data-index="<?php echo esc_attr(is_numeric($index) ? $index : 0); ?>" style="background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 20px; margin-bottom: 20px;">
     <div class="qtest-question-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
-        <h3 style="margin: 0;">Question #<span class="question-number"><?php echo (is_numeric($index) ? intval($index) : 0) + 1; ?></span></h3>
-        <button type="button" class="button qtest-delete-question" data-question-id="<?php echo $question_id; ?>">Delete</button>
+        <h3 style="margin: 0;">Question #<span class="question-number"><?php echo esc_html((is_numeric($index) ? intval($index) : 0) + 1); ?></span></h3>
+        <button type="button" class="button qtest-delete-question" data-question-id="<?php echo esc_attr($question_id); ?>">Delete</button>
     </div>
     
     <table class="form-table">
         <tr>
-            <th scope="row"><label for="question_type_<?php echo $question_id; ?>">Question Type <span class="description">(required)</span></label></th>
+            <th scope="row"><label for="question_type_<?php echo esc_attr($question_id); ?>">Question Type <span class="description">(required)</span></label></th>
             <td>
-                <select id="question_type_<?php echo $question_id; ?>" name="question_type" class="regular-text qtest-question-type" required>
+                <select id="question_type_<?php echo esc_attr($question_id); ?>" name="question_type" class="regular-text qtest-question-type" required>
                     <option value="multiple_choice" <?php selected($current_type, 'multiple_choice'); ?>>Multiple Choice (A, B, C, D)</option>
                     <option value="true_false" <?php selected($current_type, 'true_false'); ?>>True/False</option>
                     <option value="short_answer" <?php selected($current_type, 'short_answer'); ?>>Short Answer (Text Input)</option>
@@ -26,9 +26,9 @@ $current_type = isset($question->question_type) && !empty($question->question_ty
             </td>
         </tr>
         <tr>
-            <th scope="row"><label for="question_text_<?php echo $question_id; ?>">Question Text <span class="description">(required)</span></label></th>
+            <th scope="row"><label for="question_text_<?php echo esc_attr($question_id); ?>">Question Text <span class="description">(required)</span></label></th>
             <td>
-                <textarea id="question_text_<?php echo $question_id; ?>" name="question_text" class="large-text" rows="4" required placeholder="Enter your question here..."><?php echo esc_textarea($question->question_text); ?></textarea>
+                <textarea id="question_text_<?php echo esc_attr($question_id); ?>" name="question_text" class="large-text" rows="4" required placeholder="Enter your question here..."><?php echo esc_textarea($question->question_text); ?></textarea>
                 <p class="description">Enter the question text that will be displayed to users.</p>
             </td>
         </tr>
@@ -52,33 +52,33 @@ $current_type = isset($question->question_type) && !empty($question->question_ty
         </tr>
         <tbody class="qtest-options-container" data-question-type="multiple_choice" style="<?php echo ($current_type === 'multiple_choice') ? '' : 'display: none;'; ?>">
             <tr class="qtest-option-row" data-option="a">
-                <th scope="row"><label for="option_a_<?php echo $question_id; ?>">Option A <span class="description">(required)</span></label></th>
+                <th scope="row"><label for="option_a_<?php echo esc_attr($question_id); ?>">Option A <span class="description">(required)</span></label></th>
                 <td>
-                    <input type="text" id="option_a_<?php echo $question_id; ?>" name="option_a" value="<?php echo esc_attr($question->option_a); ?>" class="regular-text" placeholder="Enter option A">
+                    <input type="text" id="option_a_<?php echo esc_attr($question_id); ?>" name="option_a" value="<?php echo esc_attr($question->option_a); ?>" class="regular-text" placeholder="Enter option A">
                 </td>
             </tr>
             <tr class="qtest-option-row" data-option="b">
-                <th scope="row"><label for="option_b_<?php echo $question_id; ?>">Option B <span class="description">(required)</span></label></th>
+                <th scope="row"><label for="option_b_<?php echo esc_attr($question_id); ?>">Option B <span class="description">(required)</span></label></th>
                 <td>
-                    <input type="text" id="option_b_<?php echo $question_id; ?>" name="option_b" value="<?php echo esc_attr($question->option_b); ?>" class="regular-text" placeholder="Enter option B">
+                    <input type="text" id="option_b_<?php echo esc_attr($question_id); ?>" name="option_b" value="<?php echo esc_attr($question->option_b); ?>" class="regular-text" placeholder="Enter option B">
                 </td>
             </tr>
             <tr class="qtest-option-row" data-option="c">
-                <th scope="row"><label for="option_c_<?php echo $question_id; ?>">Option C <span class="description">(required)</span></label></th>
+                <th scope="row"><label for="option_c_<?php echo esc_attr($question_id); ?>">Option C <span class="description">(required)</span></label></th>
                 <td>
-                    <input type="text" id="option_c_<?php echo $question_id; ?>" name="option_c" value="<?php echo esc_attr($question->option_c); ?>" class="regular-text" placeholder="Enter option C">
+                    <input type="text" id="option_c_<?php echo esc_attr($question_id); ?>" name="option_c" value="<?php echo esc_attr($question->option_c); ?>" class="regular-text" placeholder="Enter option C">
                 </td>
             </tr>
             <tr class="qtest-option-row" data-option="d">
-                <th scope="row"><label for="option_d_<?php echo $question_id; ?>">Option D <span class="description">(required)</span></label></th>
+                <th scope="row"><label for="option_d_<?php echo esc_attr($question_id); ?>">Option D <span class="description">(required)</span></label></th>
                 <td>
-                    <input type="text" id="option_d_<?php echo $question_id; ?>" name="option_d" value="<?php echo esc_attr($question->option_d); ?>" class="regular-text" placeholder="Enter option D">
+                    <input type="text" id="option_d_<?php echo esc_attr($question_id); ?>" name="option_d" value="<?php echo esc_attr($question->option_d); ?>" class="regular-text" placeholder="Enter option D">
                 </td>
             </tr>
             <tr class="qtest-correct-answer-row">
-                <th scope="row"><label for="correct_answer_<?php echo $question_id; ?>">Correct Answer <span class="description">(required)</span></label></th>
+                <th scope="row"><label for="correct_answer_<?php echo esc_attr($question_id); ?>">Correct Answer <span class="description">(required)</span></label></th>
                 <td>
-                    <select id="correct_answer_<?php echo $question_id; ?>" name="correct_answer" class="regular-text">
+                    <select id="correct_answer_<?php echo esc_attr($question_id); ?>" name="correct_answer" class="regular-text">
                         <option value="A" <?php selected($question->correct_answer, 'A'); ?>>A</option>
                         <option value="B" <?php selected($question->correct_answer, 'B'); ?>>B</option>
                         <option value="C" <?php selected($question->correct_answer, 'C'); ?>>C</option>
@@ -90,9 +90,9 @@ $current_type = isset($question->question_type) && !empty($question->question_ty
         </tbody>
         <tbody class="qtest-options-container" data-question-type="true_false" style="<?php echo ($current_type === 'true_false') ? '' : 'display: none;'; ?>">
             <tr>
-                <th scope="row"><label for="correct_answer_tf_<?php echo $question_id; ?>">Correct Answer <span class="description">(required)</span></label></th>
+                <th scope="row"><label for="correct_answer_tf_<?php echo esc_attr($question_id); ?>">Correct Answer <span class="description">(required)</span></label></th>
                 <td>
-                    <select id="correct_answer_tf_<?php echo $question_id; ?>" name="correct_answer" class="regular-text">
+                    <select id="correct_answer_tf_<?php echo esc_attr($question_id); ?>" name="correct_answer" class="regular-text">
                         <option value="True" <?php selected($question->correct_answer, 'True'); ?>>True</option>
                         <option value="False" <?php selected($question->correct_answer, 'False'); ?>>False</option>
                     </select>
@@ -102,17 +102,17 @@ $current_type = isset($question->question_type) && !empty($question->question_ty
         </tbody>
         <tbody class="qtest-options-container" data-question-type="short_answer" style="<?php echo ($current_type === 'short_answer') ? '' : 'display: none;'; ?>">
             <tr>
-                <th scope="row"><label for="correct_answer_sa_<?php echo $question_id; ?>">Correct Answer <span class="description">(required)</span></label></th>
+                <th scope="row"><label for="correct_answer_sa_<?php echo esc_attr($question_id); ?>">Correct Answer <span class="description">(required)</span></label></th>
                 <td>
-                    <input type="text" id="correct_answer_sa_<?php echo $question_id; ?>" name="correct_answer" value="<?php echo esc_attr($question->correct_answer); ?>" class="regular-text" placeholder="Enter the correct answer">
+                    <input type="text" id="correct_answer_sa_<?php echo esc_attr($question_id); ?>" name="correct_answer" value="<?php echo esc_attr($question->correct_answer); ?>" class="regular-text" placeholder="Enter the correct answer">
                     <p class="description">Enter the expected answer. User's answer will be compared (case-insensitive).</p>
                 </td>
             </tr>
         </tbody>
         <tr>
-            <th scope="row"><label for="question_order_<?php echo $question_id; ?>">Order</label></th>
+            <th scope="row"><label for="question_order_<?php echo esc_attr($question_id); ?>">Order</label></th>
             <td>
-                <input type="number" id="question_order_<?php echo $question_id; ?>" name="question_order" value="<?php echo esc_attr($question->question_order); ?>" class="small-text" min="0" placeholder="0">
+                <input type="number" id="question_order_<?php echo esc_attr($question_id); ?>" name="question_order" value="<?php echo esc_attr($question->question_order); ?>" class="small-text" min="0" placeholder="0">
                 <p class="description">Set the display order (lower numbers appear first). Leave as 0 for default order.</p>
             </td>
         </tr>

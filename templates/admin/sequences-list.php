@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 ?>
 <div class="wrap">
     <h1 class="wp-heading-inline">Test Sequences</h1>
-    <a href="<?php echo admin_url('admin.php?page=qtest-sequence-new'); ?>" class="page-title-action">Add New Sequence</a>
+    <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-sequence-new')); ?>" class="page-title-action">Add New Sequence</a>
     
     <hr class="wp-header-end">
     
@@ -37,7 +37,7 @@ if (!defined('ABSPATH')) {
         <tbody>
             <?php if (empty($sequences)): ?>
                 <tr>
-                    <td colspan="7">No sequences found. <a href="<?php echo admin_url('admin.php?page=qtest-sequence-new'); ?>">Create your first sequence</a></td>
+                    <td colspan="7">No sequences found. <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-sequence-new')); ?>">Create your first sequence</a></td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($sequences as $sequence): 
@@ -60,13 +60,13 @@ if (!defined('ABSPATH')) {
                         </td>
                         <td><?php echo esc_html($sequence->created_at); ?></td>
                         <td>
-                            <a href="<?php echo admin_url('admin.php?page=qtest-sequences&sequence_id=' . $sequence->id); ?>" 
+                            <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-sequences&sequence_id=' . $sequence->id)); ?>" 
                                class="button button-small" title="Edit Sequence">
                                 <span class="dashicons dashicons-edit"></span>
                             </a>
                             <button type="button" 
                                     class="button button-small qtest-delete-sequence" 
-                                    data-sequence-id="<?php echo $sequence->id; ?>"
+                                    data-sequence-id="<?php echo esc_attr($sequence->id); ?>"
                                     title="Delete Sequence"
                                     style="color: #a00; margin-left: 5px;">
                                 <span class="dashicons dashicons-trash"></span>

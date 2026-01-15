@@ -7,8 +7,8 @@ if (!defined('ABSPATH')) {
     <h1><?php echo $sequence ? 'Edit Sequence' : 'Add New Sequence'; ?></h1>
     
     <form id="qtest-sequence-form">
-        <input type="hidden" id="sequence_id" name="sequence_id" value="<?php echo $sequence ? $sequence->id : 0; ?>">
-        <input type="hidden" id="qtest_nonce" value="<?php echo wp_create_nonce('qtest_nonce'); ?>">
+        <input type="hidden" id="sequence_id" name="sequence_id" value="<?php echo $sequence ? esc_attr($sequence->id) : 0; ?>">
+        <input type="hidden" id="qtest_nonce" value="<?php echo esc_attr(wp_create_nonce('qtest_nonce')); ?>">
         
         <table class="form-table">
             <tr>
@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
         
         <p class="submit">
             <button type="submit" class="button button-primary"><?php echo $sequence ? 'Update Sequence' : 'Save Sequence'; ?></button>
-            <a href="<?php echo admin_url('admin.php?page=qtest-sequences'); ?>" class="button">Cancel</a>
+            <a href="<?php echo esc_url(admin_url('admin.php?page=qtest-sequences')); ?>" class="button">Cancel</a>
         </p>
     </form>
 
@@ -37,17 +37,17 @@ if (!defined('ABSPATH')) {
             <?php foreach ($sequence_tests as $seq_test): 
                 $test = QTest_Database::get_test($seq_test->test_id);
             ?>
-                <div class="qtest-sequence-test-item" data-sequence-test-id="<?php echo $seq_test->id; ?>" style="background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 15px; margin-bottom: 10px;">
+                <div class="qtest-sequence-test-item" data-sequence-test-id="<?php echo esc_attr($seq_test->id); ?>" style="background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 15px; margin-bottom: 10px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <strong>Order <?php echo $seq_test->test_order; ?>:</strong> 
-                            <?php echo $test ? esc_html($test->title) : 'Test ID: ' . $seq_test->test_id; ?>
+                            <strong>Order <?php echo esc_html($seq_test->test_order); ?>:</strong> 
+                            <?php echo $test ? esc_html($test->title) : 'Test ID: ' . esc_html($seq_test->test_id); ?>
                             <br>
                             <small style="color: #666;">
                                 Auto Continue: <?php echo $seq_test->auto_continue ? 'Yes' : 'No (User confirmation required)'; ?>
                             </small>
                         </div>
-                        <button type="button" class="button button-small qtest-remove-sequence-test" data-sequence-test-id="<?php echo $seq_test->id; ?>">Remove</button>
+                        <button type="button" class="button button-small qtest-remove-sequence-test" data-sequence-test-id="<?php echo esc_attr($seq_test->id); ?>">Remove</button>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -65,7 +65,7 @@ if (!defined('ABSPATH')) {
                     <select id="add_test_id" class="regular-text">
                         <option value="">-- Select Test --</option>
                         <?php foreach ($tests as $test): ?>
-                            <option value="<?php echo $test->id; ?>"><?php echo esc_html($test->title); ?> (ID: <?php echo $test->id; ?>)</option>
+                            <option value="<?php echo esc_attr($test->id); ?>"><?php echo esc_html($test->title); ?> (ID: <?php echo esc_html($test->id); ?>)</option>
                         <?php endforeach; ?>
                     </select>
                 </td>
@@ -73,7 +73,7 @@ if (!defined('ABSPATH')) {
             <tr>
                 <th><label for="add_test_order">Order</label></th>
                 <td>
-                    <input type="number" id="add_test_order" class="small-text" min="1" value="<?php echo !empty($sequence_tests) ? (max(array_column($sequence_tests, 'test_order')) + 1) : 1; ?>">
+                    <input type="number" id="add_test_order" class="small-text" min="1" value="<?php echo esc_attr(!empty($sequence_tests) ? (max(array_column($sequence_tests, 'test_order')) + 1) : 1); ?>">
                     <p class="description">Lower numbers appear first. Tests will be taken in this order.</p>
                 </td>
             </tr>

@@ -8,8 +8,8 @@ if (!defined('ABSPATH')) {
     <h1><?php echo $test ? 'Edit Test' : 'Add New Test'; ?></h1>
     
     <form id="qtest-test-form">
-        <input type="hidden" id="test_id" name="test_id" value="<?php echo $test ? $test->id : 0; ?>">
-        <input type="hidden" id="qtest_nonce" value="<?php echo wp_create_nonce('qtest_nonce'); ?>">
+        <input type="hidden" id="test_id" name="test_id" value="<?php echo $test ? esc_attr($test->id) : 0; ?>">
+        <input type="hidden" id="qtest_nonce" value="<?php echo esc_attr(wp_create_nonce('qtest_nonce')); ?>">
         
         <table class="form-table">
             <tr>
@@ -60,7 +60,7 @@ if (!defined('ABSPATH')) {
         
     <p class="submit">
         <button type="submit" class="button button-primary">Save Test</button>
-        <a href="<?php echo admin_url('admin.php?page=qtest'); ?>" class="button">Cancel</a>
+        <a href="<?php echo esc_url(admin_url('admin.php?page=qtest')); ?>" class="button">Cancel</a>
     </p>
 </form>
 

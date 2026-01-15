@@ -52,10 +52,10 @@ class QTest_Ajax {
         $table = $wpdb->prefix . 'qtest_tests';
         
         $test_id = isset($_POST['test_id']) ? intval($_POST['test_id']) : 0;
-        $title = sanitize_text_field($_POST['title']);
-        $description = sanitize_textarea_field($_POST['description']);
+        $title = isset($_POST['title']) ? sanitize_text_field(wp_unslash($_POST['title'])) : '';
+        $description = isset($_POST['description']) ? sanitize_textarea_field(wp_unslash($_POST['description'])) : '';
         $time_limit = isset($_POST['time_limit']) ? intval($_POST['time_limit']) : 0;
-        $allowed_roles = isset($_POST['allowed_roles']) ? sanitize_text_field($_POST['allowed_roles']) : '';
+        $allowed_roles = isset($_POST['allowed_roles']) ? sanitize_text_field(wp_unslash($_POST['allowed_roles'])) : '';
         
         if (empty($title)) {
             wp_send_json_error(array('message' => 'Title is required'));
@@ -116,16 +116,16 @@ class QTest_Ajax {
         $table = $wpdb->prefix . 'qtest_questions';
         
         $question_id = isset($_POST['question_id']) ? intval($_POST['question_id']) : 0;
-        $test_id = intval($_POST['test_id']);
-        $question_type = isset($_POST['question_type']) ? sanitize_text_field($_POST['question_type']) : 'multiple_choice';
-        $question_text = sanitize_textarea_field($_POST['question_text']);
-        $question_image = esc_url_raw($_POST['question_image']);
-        $option_a = isset($_POST['option_a']) ? sanitize_text_field($_POST['option_a']) : '';
-        $option_b = isset($_POST['option_b']) ? sanitize_text_field($_POST['option_b']) : '';
-        $option_c = isset($_POST['option_c']) ? sanitize_text_field($_POST['option_c']) : '';
-        $option_d = isset($_POST['option_d']) ? sanitize_text_field($_POST['option_d']) : '';
-        $correct_answer = sanitize_text_field($_POST['correct_answer']);
-        $question_order = intval($_POST['question_order']);
+        $test_id = isset($_POST['test_id']) ? intval($_POST['test_id']) : 0;
+        $question_type = isset($_POST['question_type']) ? sanitize_text_field(wp_unslash($_POST['question_type'])) : 'multiple_choice';
+        $question_text = isset($_POST['question_text']) ? sanitize_textarea_field(wp_unslash($_POST['question_text'])) : '';
+        $question_image = isset($_POST['question_image']) ? esc_url_raw(wp_unslash($_POST['question_image'])) : '';
+        $option_a = isset($_POST['option_a']) ? sanitize_text_field(wp_unslash($_POST['option_a'])) : '';
+        $option_b = isset($_POST['option_b']) ? sanitize_text_field(wp_unslash($_POST['option_b'])) : '';
+        $option_c = isset($_POST['option_c']) ? sanitize_text_field(wp_unslash($_POST['option_c'])) : '';
+        $option_d = isset($_POST['option_d']) ? sanitize_text_field(wp_unslash($_POST['option_d'])) : '';
+        $correct_answer = isset($_POST['correct_answer']) ? sanitize_text_field(wp_unslash($_POST['correct_answer'])) : '';
+        $question_order = isset($_POST['question_order']) ? intval($_POST['question_order']) : 0;
         
         if (empty($question_text) || empty($correct_answer)) {
             wp_send_json_error(array('message' => 'Question text and correct answer are required'));
@@ -198,7 +198,7 @@ class QTest_Ajax {
         }
         
         global $wpdb;
-        $test_id = intval($_POST['test_id']);
+        $test_id = isset($_POST['test_id']) ? intval($_POST['test_id']) : 0;
         
         // Delete questions first
         $questions_table = $wpdb->prefix . 'qtest_questions';
@@ -226,7 +226,7 @@ class QTest_Ajax {
         }
         
         global $wpdb;
-        $question_id = intval($_POST['question_id']);
+        $question_id = isset($_POST['question_id']) ? intval($_POST['question_id']) : 0;
         
         // Validate question ID
         if ($question_id <= 0) {
@@ -285,13 +285,17 @@ class QTest_Ajax {
     public function submit_result() {
         check_ajax_referer('qtest_nonce', 'nonce');
         
-        $test_id = intval($_POST['test_id']);
-        $first_name = sanitize_text_field($_POST['first_name']);
-        $last_name = sanitize_text_field($_POST['last_name']);
-        $email = sanitize_email($_POST['email']);
-        $answers = isset($_POST['answers']) ? $_POST['answers'] : array();
-        $time_started = isset($_POST['time_started']) ? sanitize_text_field($_POST['time_started']) : null;
-        $time_completed = isset($_POST['time_completed']) ? sanitize_text_field($_POST['time_completed']) : current_time('mysql');
+        $test_id = isset($_POST['test_id']) ? intval($_POST['test_id']) : 0;
+        $first_name = isset($_POST['first_name']) ? sanitize_text_field(wp_unslash($_POST['first_name'])) : '';
+        $last_name = isset($_POST['last_name']) ? sanitize_text_field(wp_unslash($_POST['last_name'])) : '';
+        $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+        $answers = isset($_POST['answers']) && is_array($_POST['answers']) ? wp_unslash($_POST['answers']) : array();
+        // Sanitize answers array
+        if (is_array($answers) && !empty($answers)) {
+            $answers = array_map('sanitize_text_field', $answers);
+        }
+        $time_started = isset($_POST['time_started']) ? sanitize_text_field(wp_unslash($_POST['time_started'])) : null;
+        $time_completed = isset($_POST['time_completed']) ? sanitize_text_field(wp_unslash($_POST['time_completed'])) : current_time('mysql');
         $time_taken = isset($_POST['time_taken']) ? intval($_POST['time_taken']) : 0;
         $sequence_mode = isset($_POST['sequence_mode']) && $_POST['sequence_mode'] === 'true';
         
@@ -365,8 +369,10 @@ class QTest_Ajax {
         }
         
         // Add question times if provided
-        $question_times = isset($_POST['question_times']) ? $_POST['question_times'] : array();
+        $question_times = isset($_POST['question_times']) && is_array($_POST['question_times']) ? wp_unslash($_POST['question_times']) : array();
         if (!empty($question_times) && is_array($question_times)) {
+            // Sanitize question_times array
+            $question_times = array_map('sanitize_text_field', $question_times);
             $result_data['question_times'] = $question_times;
         }
         
@@ -400,8 +406,8 @@ class QTest_Ajax {
     public function get_result() {
         check_ajax_referer('qtest_nonce', 'nonce');
         
-        $email = sanitize_email($_POST['email']);
-        $test_id = intval($_POST['test_id']);
+        $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+        $test_id = isset($_POST['test_id']) ? intval($_POST['test_id']) : 0;
         
         if (empty($email) || !is_email($email)) {
             wp_send_json_error(array('message' => 'Please provide a valid email'));
@@ -429,7 +435,7 @@ class QTest_Ajax {
     public function get_average_times() {
         check_ajax_referer('qtest_nonce', 'nonce');
         
-        $test_id = intval($_POST['test_id']);
+        $test_id = isset($_POST['test_id']) ? intval($_POST['test_id']) : 0;
         $averages = QTest_Database::get_average_times_per_question($test_id);
         
         wp_send_json_success(array('averages' => $averages));
@@ -445,7 +451,7 @@ class QTest_Ajax {
             wp_send_json_error(array('message' => 'Unauthorized'));
         }
         
-        $result_id = intval($_POST['result_id']);
+        $result_id = isset($_POST['result_id']) ? intval($_POST['result_id']) : 0;
         $result = QTest_Database::get_result_by_id($result_id);
         
         if (!$result) {
@@ -484,7 +490,7 @@ class QTest_Ajax {
         }
         
         global $wpdb;
-        $result_id = intval($_POST['result_id']);
+        $result_id = isset($_POST['result_id']) ? intval($_POST['result_id']) : 0;
         $table = $wpdb->prefix . 'qtest_results';
         
         $result = $wpdb->delete($table, array('id' => $result_id), array('%d'));
@@ -580,11 +586,16 @@ class QTest_Ajax {
         }
         
         // Handle file upload
-        if (!isset($_FILES['csv_file']) || $_FILES['csv_file']['error'] !== UPLOAD_ERR_OK) {
+        if (!isset($_FILES['csv_file']) || !isset($_FILES['csv_file']['error']) || $_FILES['csv_file']['error'] !== UPLOAD_ERR_OK) {
             wp_send_json_error(array('message' => 'Please upload a valid CSV file'));
         }
         
-        $file = $_FILES['csv_file'];
+        // Sanitize file array
+        $file = array(
+            'name' => isset($_FILES['csv_file']['name']) ? sanitize_file_name($_FILES['csv_file']['name']) : '',
+            'tmp_name' => isset($_FILES['csv_file']['tmp_name']) ? sanitize_text_field($_FILES['csv_file']['tmp_name']) : '',
+            'size' => isset($_FILES['csv_file']['size']) ? intval($_FILES['csv_file']['size']) : 0
+        );
         
         // Validate file type
         $file_ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -597,16 +608,21 @@ class QTest_Ajax {
             wp_send_json_error(array('message' => 'File size must be less than 2MB'));
         }
         
-        // Read CSV file
-        $handle = fopen($file['tmp_name'], 'r');
-        if ($handle === false) {
+        // Read CSV file content
+        $file_content = file_get_contents($file['tmp_name']);
+        if ($file_content === false) {
             wp_send_json_error(array('message' => 'Failed to read CSV file'));
         }
         
+        // Parse CSV content into lines
+        $lines = str_getcsv($file_content, "\n");
+        if (empty($lines)) {
+            wp_send_json_error(array('message' => 'CSV file is empty or invalid'));
+        }
+        
         // Read header row
-        $headers = fgetcsv($handle);
-        if ($headers === false) {
-            fclose($handle);
+        $headers = str_getcsv(array_shift($lines));
+        if ($headers === false || empty($headers)) {
             wp_send_json_error(array('message' => 'CSV file is empty or invalid'));
         }
         
@@ -623,7 +639,6 @@ class QTest_Ajax {
         }
         
         if (!empty($missing_columns)) {
-            fclose($handle);
             wp_send_json_error(array('message' => 'Missing required columns: ' . implode(', ', $missing_columns)));
         }
         
@@ -634,7 +649,11 @@ class QTest_Ajax {
         $row_num = 1;
         
         // Process each row
-        while (($row = fgetcsv($handle)) !== false) {
+        foreach ($lines as $line) {
+            $row = str_getcsv($line);
+            if ($row === false) {
+                continue;
+            }
             $row_num++;
             
             // Skip empty rows
@@ -731,8 +750,6 @@ class QTest_Ajax {
             }
         }
         
-        fclose($handle);
-        
         $message = "Imported $imported question(s) successfully.";
         if (!empty($errors)) {
             $message .= " Errors: " . count($errors) . " row(s) failed. " . implode('; ', array_slice($errors, 0, 5));
@@ -762,8 +779,8 @@ class QTest_Ajax {
         $table = $wpdb->prefix . 'qtest_sequences';
         
         $sequence_id = isset($_POST['sequence_id']) ? intval($_POST['sequence_id']) : 0;
-        $title = sanitize_text_field($_POST['title']);
-        $description = sanitize_textarea_field($_POST['description']);
+        $title = isset($_POST['title']) ? sanitize_text_field(wp_unslash($_POST['title'])) : '';
+        $description = isset($_POST['description']) ? sanitize_textarea_field(wp_unslash($_POST['description'])) : '';
         
         if (empty($title)) {
             wp_send_json_error(array('message' => 'Title is required'));
@@ -808,7 +825,7 @@ class QTest_Ajax {
         }
         
         global $wpdb;
-        $sequence_id = intval($_POST['sequence_id']);
+        $sequence_id = isset($_POST['sequence_id']) ? intval($_POST['sequence_id']) : 0;
         
         // Delete sequence tests first
         $sequence_tests_table = $wpdb->prefix . 'qtest_sequence_tests';
@@ -838,9 +855,9 @@ class QTest_Ajax {
         global $wpdb;
         $table = $wpdb->prefix . 'qtest_sequence_tests';
         
-        $sequence_id = intval($_POST['sequence_id']);
-        $test_id = intval($_POST['test_id']);
-        $test_order = intval($_POST['test_order']);
+        $sequence_id = isset($_POST['sequence_id']) ? intval($_POST['sequence_id']) : 0;
+        $test_id = isset($_POST['test_id']) ? intval($_POST['test_id']) : 0;
+        $test_order = isset($_POST['test_order']) ? intval($_POST['test_order']) : 0;
         $auto_continue = isset($_POST['auto_continue']) && $_POST['auto_continue'] == '1' ? 1 : 0;
         
         if (!$sequence_id || !$test_id) {
@@ -887,7 +904,7 @@ class QTest_Ajax {
         }
         
         global $wpdb;
-        $sequence_test_id = intval($_POST['sequence_test_id']);
+        $sequence_test_id = isset($_POST['sequence_test_id']) ? intval($_POST['sequence_test_id']) : 0;
         
         // Validate sequence test ID
         if ($sequence_test_id <= 0) {

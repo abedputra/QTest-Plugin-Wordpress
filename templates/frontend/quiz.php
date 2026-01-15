@@ -26,7 +26,7 @@ if (!defined('ABSPATH')) {
             <?php foreach ($questions as $index => $question): 
                 $question_type = isset($question->question_type) && !empty($question->question_type) ? $question->question_type : 'multiple_choice';
             ?>
-                <div class="qtest-question-page <?php echo $index === 0 ? 'active' : ''; ?>" data-question-id="<?php echo $question->id; ?>" data-index="<?php echo $index; ?>" data-question-type="<?php echo esc_attr($question_type); ?>">
+                <div class="qtest-question-page <?php echo $index === 0 ? 'active' : ''; ?>" data-question-id="<?php echo esc_attr($question->id); ?>" data-index="<?php echo esc_attr($index); ?>" data-question-type="<?php echo esc_attr($question_type); ?>">
                     <div class="qtest-question-box">
                         <?php if ($question->question_image): ?>
                             <div class="qtest-question-image">
@@ -79,7 +79,7 @@ if (!defined('ABSPATH')) {
                             </div>
                         <?php elseif ($question_type === 'short_answer'): ?>
                             <div class="qtest-short-answer-container">
-                                <input type="text" class="qtest-short-answer-input" placeholder="Type your answer here..." data-question-id="<?php echo $question->id; ?>">
+                                <input type="text" class="qtest-short-answer-input" placeholder="Type your answer here..." data-question-id="<?php echo esc_attr($question->id); ?>">
                             </div>
                         <?php endif; ?>
                     </div>
@@ -111,8 +111,8 @@ if (!defined('ABSPATH')) {
         <h2>Complete Your Test</h2>
         <p id="qtest-completion-message">Please provide your information to receive your results:</p>
         <form id="qtest-result-form">
-            <input type="hidden" id="qtest_test_id" value="<?php echo $test->id; ?>">
-            <input type="hidden" id="qtest_nonce" value="<?php echo wp_create_nonce('qtest_nonce'); ?>">
+            <input type="hidden" id="qtest_test_id" value="<?php echo esc_attr($test->id); ?>">
+            <input type="hidden" id="qtest_nonce" value="<?php echo esc_attr(wp_create_nonce('qtest_nonce')); ?>">
             <input type="hidden" id="qtest_answers" name="answers">
             <input type="hidden" id="qtest_time_started" name="time_started">
             <input type="hidden" id="qtest_time_completed" name="time_completed">
@@ -149,11 +149,11 @@ if (!defined('ABSPATH')) {
 
 <script>
 var qtestData = {
-    testId: <?php echo $test->id; ?>,
-    totalQuestions: <?php echo count($questions); ?>,
-    questions: <?php echo json_encode($questions); ?>,
-    timeLimit: <?php echo intval($test->time_limit); ?>,
-    timeLimitSeconds: <?php echo intval($test->time_limit) * 60; ?>,
-    sequenceInfo: <?php echo $sequence_info ? json_encode($sequence_info) : 'null'; ?>
+    testId: <?php echo absint($test->id); ?>,
+    totalQuestions: <?php echo absint(count($questions)); ?>,
+    questions: <?php echo wp_json_encode($questions); ?>,
+    timeLimit: <?php echo absint($test->time_limit); ?>,
+    timeLimitSeconds: <?php echo absint($test->time_limit) * 60; ?>,
+    sequenceInfo: <?php echo $sequence_info ? wp_json_encode($sequence_info) : 'null'; ?>
 };
 </script>
